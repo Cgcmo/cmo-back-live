@@ -38,8 +38,11 @@ download_count_collection = auth_db["download-count"]
 visitor_collection = auth_db["visitor_logs"]
 
 
-from deepface.basemodels import Facenet
-facenet_model = Facenet.loadModel()
+
+print("📦 Preloading Facenet model...")
+facenet_model = DeepFace.build_model("Facenet")
+print("✅ Facenet model loaded and cached!")
+
 # MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
 
 # Helper function: Compress Image
