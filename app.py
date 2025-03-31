@@ -26,7 +26,7 @@ def handle_options_request():
     if request.method == "OPTIONS":
         return jsonify({"message": "CORS Preflight OK"}), 200
 # MongoDB Setup
-client = MongoClient("mongodb+srv://Aayush:Aayush%402003@photo-gallery.pvd7i.mongodb.net/?retryWrites=true&w=majority&appName=photo-gallery")
+client = MongoClient("mongodb://localhost:27017")
 db = client["photo_gallery"]
 albums_collection = db["albums"]
 db = client["dist_and_depart"]
@@ -38,7 +38,8 @@ download_count_collection = auth_db["download-count"]
 visitor_collection = auth_db["visitor_logs"]
 
 
- MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
+
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
 
 # Helper function: Compress Image
 
@@ -82,7 +83,6 @@ def extract_faces(image_data):
         faces = DeepFace.represent(
             img_path=image_path,
             model_name="Facenet",
-             model=facenet_model,
             enforce_detection=False
         )
 
