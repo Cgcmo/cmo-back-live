@@ -38,8 +38,9 @@ download_count_collection = auth_db["download-count"]
 visitor_collection = auth_db["visitor_logs"]
 
 
-
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
+from deepface.basemodels import Facenet
+facenet_model = Facenet.loadModel()
+# MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
 
 # Helper function: Compress Image
 
@@ -83,6 +84,7 @@ def extract_faces(image_data):
         faces = DeepFace.represent(
             img_path=image_path,
             model_name="Facenet",
+             model=facenet_model,
             enforce_detection=False
         )
 
