@@ -26,7 +26,7 @@ def handle_options_request():
     if request.method == "OPTIONS":
         return jsonify({"message": "CORS Preflight OK"}), 200
 # MongoDB Setup
-client = MongoClient("mongodb://localhost:27017")
+client = MongoClient("mongodb+srv://Aayush:Aayush%402003@photo-gallery.pvd7i.mongodb.net/?retryWrites=true&w=majority&appName=photo-gallery")
 db = client["photo_gallery"]
 albums_collection = db["albums"]
 db = client["dist_and_depart"]
