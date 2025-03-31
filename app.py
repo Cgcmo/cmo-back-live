@@ -14,7 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import zipfile
 from datetime import datetime, timedelta
-from pathlib import Path
+
 
 
 app = Flask(__name__)
@@ -37,17 +37,8 @@ users_collection = auth_db["users"]
 download_count_collection = auth_db["download-count"]
 visitor_collection = auth_db["visitor_logs"]
 
-weights_path = Path("/opt/render/.deepface/weights/facenet_weights.h5")
 
-if not weights_path.exists():
-    print("📦 facenet_weights.h5 not found. Will be downloaded on model load...")
-else:
-    print("✅ facenet_weights.h5 already exists. Skipping download...")
-    
-print("⚙️ Loading Facenet model...")
-facenet_model = DeepFace.build_model("Facenet")
-print("✅ Facenet model loaded!")
-# MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
+ MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
 
 # Helper function: Compress Image
 
