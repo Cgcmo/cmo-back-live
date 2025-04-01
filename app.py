@@ -79,24 +79,24 @@ def extract_faces(image_data):
         f.write(base64.b64decode(image_data))
 
     try:
-         print(f"🔍 Extracting faces from: {image_path}")
+        print(f"🔍 Extracting faces from: {image_path}")
 
-        # Tell DeepFace to use local cache path
+        # ✅ Ensure DeepFace uses our local facenet_keras.h5 model
         os.makedirs("/opt/render/.deepface/weights", exist_ok=True)
         custom_model_path = "/opt/render/.deepface/weights/facenet_keras.h5"
 
-        # Copy facenet_keras.h5 into this path before running
+        # ✅ Copy only if not already present
         if not os.path.exists(custom_model_path) and os.path.exists(MODEL_PATH):
             import shutil
             shutil.copy(MODEL_PATH, custom_model_path)
             print("✅ Model copied to DeepFace cache directory.")
 
+        # ✅ Run face embedding
         faces = DeepFace.represent(
             img_path=image_path,
             model_name="Facenet",
             enforce_detection=False
         )
-
 
         os.remove(image_path)
         print(f"✅ Found {len(faces)} face(s)")
@@ -111,7 +111,6 @@ def extract_faces(image_data):
         print("❌ Face extraction failed:", str(e))
         os.remove(image_path)
         return []
-
 
 
 
