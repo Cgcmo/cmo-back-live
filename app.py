@@ -14,6 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import zipfile
 from datetime import datetime, timedelta
+from deepface.basemodels import Facenet
 
 
 
@@ -40,6 +41,10 @@ visitor_collection = auth_db["visitor_logs"]
 
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "facenet_keras.h5")
+
+print("\U0001F4E6 Loading Facenet model from local file...")
+face_model = Facenet.loadModel(MODEL_PATH)
+print("✅ Facenet model loaded.")
 
 # Helper function: Compress Image
 
@@ -81,8 +86,9 @@ def extract_faces(image_data):
 
         # ✅ No 'model' or 'model_path' passed — just use default loading
         faces = DeepFace.represent(
-            img_path=image_path,
+           img_path=image_path,
             model_name="Facenet",
+            model=face_model,
             enforce_detection=False
         )
 
