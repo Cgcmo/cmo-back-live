@@ -59,15 +59,12 @@ def compress_image(image_base64, quality=50):
         if image.mode == "RGBA":
             image = image.convert("RGB")
 
-        # ✅ Compress the image
+        image = image.resize((400, 400))  # ✅ Resize to reduce memory usage
         output_io = io.BytesIO()
         image.save(output_io, format="JPEG", quality=quality)
         output_io.seek(0)
-
-        # ✅ Encode the compressed image back to base64
         compressed_base64 = base64.b64encode(output_io.getvalue()).decode("utf-8")
         return compressed_base64
-
     except Exception as e:
         print("Error compressing image:", str(e))
         return None
@@ -77,24 +74,12 @@ def extract_faces(image_data):
     image_path = f"temp_{uuid.uuid4().hex}.jpg"
     with open(image_path, "wb") as f:
         f.write(base64.b64decode(image_data))
-
     try:
         print(f"🔍 Extracting faces from: {image_path}")
 
-        # ✅ Ensure DeepFace uses our local facenet_keras.h5 model
-        os.makedirs("/opt/render/.deepface/weights", exist_ok=True)
-        custom_model_path = "/opt/render/.deepface/weights/facenet_keras.h5"
-
-        # ✅ Copy only if not already present
-        if not os.path.exists(custom_model_path) and os.path.exists(MODEL_PATH):
-            import shutil
-            shutil.copy(MODEL_PATH, custom_model_path)
-            print("✅ Model copied to DeepFace cache directory.")
-
-        # ✅ Run face embedding
         faces = DeepFace.represent(
             img_path=image_path,
-            model_name="Facenet",
+            model_name="SFace",  # ✅ Lightweight model to avoid memory issues
             enforce_detection=False
         )
 
@@ -106,12 +91,10 @@ def extract_faces(image_data):
                 "embedding": np.array(face["embedding"]).tolist()
             } for face in faces
         ]
-
     except Exception as e:
         print("❌ Face extraction failed:", str(e))
         os.remove(image_path)
         return []
-
 
 
 
